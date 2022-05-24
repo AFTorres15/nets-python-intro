@@ -31,25 +31,24 @@ words = 0
 # word list
 master = {}
 
-
-
-
 # open input file
 # remove punctuation and new lines
 with open(inputFname, 'r') as inputFile:
     for line in inputFile:
         # get rid of newline characters
-        line = line.strip()
+        line = re.sub("\n", ' ', line)
         # split line on whitespace and punctuation
-        line = re.sub(r'[^\w\s]', '', line)
-        word = re.split('[ \t]', line)
+        line = re.sub(r'[^\w\s]', ' ', line)
+        word = line.split()
         for element in word:
+            element = element.lower()
             if master.get(element) is None:
                 master[element] = 1
             else:
                 master[element] = master[element]+1
-sortedMaster = sorted(master, reverse=True)
+sortedMaster = dict(sorted(master.items(), key=lambda item: item[1], reverse=True))
 for item in sortedMaster:
-    print(item , master.get(item))
+    outputFile.write(item + "\t" + str(master.get(item)) + "\n")
 
 exit()
+
